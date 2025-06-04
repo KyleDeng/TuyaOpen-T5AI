@@ -1,1 +1,1 @@
-../bk7258/compile-options.cmake
+include(${CMAKE_CURRENT_LIST_DIR}/../bk7258/compile-options.cmake)

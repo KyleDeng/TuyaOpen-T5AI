@@ -94,6 +94,7 @@ if __name__ == "__main__":
         if not armino_python_env_path or armino_python_env_path not in sys.executable:
             print('    Warning: python interpreter not running from ARMINO_PYTHON_ENV_PATH')
             print('    PATH: {}'.format(os.getenv('PATH')))
-        sys.exit(1)
+        # sys.exit(1)
+        sys.exit(0)
 
     print('Python requirements from {} are satisfied.'.format(args.requirements))

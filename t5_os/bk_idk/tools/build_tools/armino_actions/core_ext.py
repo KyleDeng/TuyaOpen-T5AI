@@ -196,6 +196,9 @@ def action_extensions(base_actions, project_path):
 		armino_path = os.environ['ARMINO_PATH']
 		armino_project_dir = os.environ.get('ARMINO_PROJECT_PATH')
 
+		cur_dir = os.path.abspath(cur_dir)
+		armino_path = os.path.abspath(armino_path)
+
 		if cur_dir != armino_path:
 			args.project_dir = cur_dir
 		else:

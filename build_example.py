@@ -10,7 +10,7 @@ import json
 
 from tools.util import (
     copy_file, need_settarget, record_target,
-    calc_md5sum, do_subprocess
+    calc_md5sum, do_subprocess, get_system_name
 )
 
 
@@ -43,7 +43,7 @@ def parser_para_file(json_file):
 
 
 def set_environment(root, build_param_path, param_data):
-    os.environ["TUYA_PROJECT_DIR"] = root
+    os.environ["TUYA_PROJECT_DIR"] = root.replace("\\", "/")
     os.environ["BUILD_PARAM_DIR"] = build_param_path
     os.environ["TUYA_HEADER_DIR"] = param_data["OPEN_HEADER_DIR"]
     os.environ["TUYA_LIBS_DIR"] = param_data["OPEN_LIBS_DIR"]
@@ -89,11 +89,13 @@ def setup_build(root, build_root, build_param_path, param_data):
 
 def build(build_root, target, app_name, app_ver) -> bool:
     cmd = f"cd {build_root} && make {target}"
+    if get_system_name() == "windows":
+        cmd += " -f Makefile_win"
 
-    project_dir = os.path.join("..", "projects", "tuya_app")
+    project_dir = os.path.join("..", "projects", "tuya_app").replace("\\", "/")
     cmd += f" PROJECT_DIR={project_dir}"
 
-    build_dir = os.path.join("..", "build")
+    build_dir = os.path.join("..", "build").replace("\\", "/")
     cmd += f" BUILD_DIR={build_dir}"
 
     cmd += f" APP_NAME={app_name}"

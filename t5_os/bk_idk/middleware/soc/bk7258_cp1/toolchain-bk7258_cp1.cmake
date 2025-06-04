@@ -1,1 +1,1 @@
-../bk7258/toolchain-bk7258.cmake
+include(${CMAKE_CURRENT_LIST_DIR}/../bk7258/toolchain-bk7258.cmake)
