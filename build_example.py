@@ -194,8 +194,8 @@ def copy_assets(build_root, target, param_data):
     return True
 
 
-def do_in_linux(root, build_root, user_cmd,
-                target, build_param_path, param_data):
+def do_with_compile(root, build_root, user_cmd,
+                    target, build_param_path, param_data):
     # Setup build
     if not setup_build(root, build_root, build_param_path, param_data):
         sys.exit(1)
@@ -239,8 +239,8 @@ def main():
         do_with_assets(root, build_root, user_cmd,
                        target, param_data)
     else:
-        do_in_linux(root, build_root, user_cmd, target,
-                    build_param_path, param_data)
+        do_with_compile(root, build_root, user_cmd, target,
+                        build_param_path, param_data)
 
     # copy asset
     if not copy_assets(build_root, target, param_data):

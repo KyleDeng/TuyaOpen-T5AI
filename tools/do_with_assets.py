@@ -6,8 +6,40 @@ import sys
 import shutil
 
 from tools.util import (
-    get_system_name, do_subprocess
+    get_system_name, do_subprocess, rm_rf
 )
+
+
+def clean(build_root, target):
+    # rm elf and bin
+    cp0_build_root = os.path.join(build_root, target)
+    cp0_app_elf = os.path.join(cp0_build_root, "app.elf")
+    cp0_app_bin = os.path.join(cp0_build_root, "app.bin")
+    cp0_elf_c_o = os.path.join(cp0_build_root, "project_elf_src.c.obj")
+    cp1_app1_bin = os.path.join(cp0_build_root, "app1.bin")
+    app_all_bin = os.path.join(cp0_build_root, "app-all.bin")
+
+    cp1_build_root = os.path.join(build_root, f"{target}_cp1")
+    cp1_app_elf = os.path.join(cp1_build_root, "app.elf")
+    cp1_app_bin = os.path.join(cp1_build_root, "app.bin")
+    cp1_elf_c_o = os.path.join(cp1_build_root, "project_elf_src.c.obj")
+
+    rm_list = [
+        cp0_app_elf,
+        cp0_app_bin,
+        cp0_elf_c_o,
+        cp1_app1_bin,
+        app_all_bin,
+        cp1_app_elf,
+        cp1_app_bin,
+        cp1_elf_c_o,
+    ]
+    for fil in rm_list:
+        rm_rf(fil)
+
+    print("Cleaning successful for T5AI.")
+    return True
+
 
 
 def _get_tuya_libs_flag(param_data):
@@ -165,7 +197,7 @@ def gen_app_all_bin(root, build_root, target, assets_root):
         "bootloader.bin")
     app_bin = os.path.join(build_root, "app.bin")
     app1_bin = os.path.join(build_root, "app1.bin")
-    app_all_bin = os.path.join(build_root, "app-all.bin")
+    app_all_bin = os.path.join(build_root, "all-app.bin")
 
     tool_gen_image, tool_encrypt_crc = _get_packager_tools(assets_root)
 
@@ -191,6 +223,10 @@ def gen_app_all_bin(root, build_root, target, assets_root):
 def do_with_assets(root, build_root, user_cmd,
                    target, param_data):
     build_root = os.path.join(build_root, "build")
+    if "clean" == user_cmd:
+        clean(build_root, target)
+        sys.exit(0)
+
     assets_root = os.path.join(root, "tools", "vendor-t5_for_open")
     open_root = param_data["OPEN_ROOT"]
     toolchain_root = os.path.join(open_root, "platform", "tools",
