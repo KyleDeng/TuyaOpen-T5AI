@@ -187,7 +187,7 @@ def do_subprocess(cmd: str) -> int:
         print("Subprocess cmd is empty.")
         return 0
 
-    print(f"do subprocess: {cmd}")
+    print(f"[do subprocess]: {cmd}")
 
     ret = 1  # 0: success
     try:

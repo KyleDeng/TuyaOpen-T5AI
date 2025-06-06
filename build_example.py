@@ -10,8 +10,9 @@ import json
 
 from tools.util import (
     copy_file, need_settarget, record_target,
-    calc_md5sum, do_subprocess
+    calc_md5sum, do_subprocess, get_system_name
 )
+from tools.do_with_assets import do_with_assets
 
 
 def clean(build_root):
@@ -193,24 +194,8 @@ def copy_assets(build_root, target, param_data):
     return True
 
 
-def main():
-    '''
-    1. 提前配置一些环境变量
-    1. 如果编译的项目变化，则清理现场
-    1. 拷贝产物到输出路径中
-    '''
-    if len(sys.argv) < 2:
-        print(f"Error: At least 2 parameters are needed {sys.argv}.")
-    build_param_path = sys.argv[1]
-    user_cmd = sys.argv[2]
-
-    root = os.path.dirname(os.path.abspath(__file__))
-    build_root = os.path.join(root, "t5_os")
-    build_param_file = os.path.join(build_param_path, "build_param.json")
-    param_data = parser_para_file(build_param_file)
-    if not len(param_data):
-        sys.exit(1)
-
+def do_in_linux(root, build_root, user_cmd,
+                target, build_param_path, param_data):
     # Setup build
     if not setup_build(root, build_root, build_param_path, param_data):
         sys.exit(1)
@@ -225,10 +210,37 @@ def main():
 
     # build project
     record_target(app_target_file, app_name)
-    target = "bk7258"
     app_ver = param_data["CONFIG_PROJECT_VERSION"]
     if not build(build_root, target, app_name, app_ver):
         sys.exit(1)
+    pass
+
+
+def main():
+    '''
+    1. 提前配置一些环境变量
+    1. 如果编译的项目变化，则清理现场
+    1. 拷贝产物到输出路径中
+    '''
+    if len(sys.argv) < 2:
+        print(f"Error: At least 2 parameters are needed {sys.argv}.")
+    build_param_path = sys.argv[1]
+    user_cmd = sys.argv[2]
+    target = "bk7258"
+
+    root = os.path.dirname(os.path.abspath(__file__))
+    build_root = os.path.join(root, "t5_os")
+    build_param_file = os.path.join(build_param_path, "build_param.json")
+    param_data = parser_para_file(build_param_file)
+    if not len(param_data):
+        sys.exit(1)
+
+    if "windows" == get_system_name():
+        do_with_assets(root, build_root, user_cmd,
+                       target, param_data)
+    else:
+        do_in_linux(root, build_root, user_cmd, target,
+                    build_param_path, param_data)
 
     # copy asset
     if not copy_assets(build_root, target, param_data):
