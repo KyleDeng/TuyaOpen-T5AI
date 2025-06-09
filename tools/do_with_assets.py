@@ -134,18 +134,6 @@ def copy_bin_file(build_root, target):
 
 
 def gen_bootloader_bin(root, build_root, target, assets_root):
-    '''
-/home/huatuo/tmp/arduino_package/output/1.1.4/vendor-t5_for_open/platform/T5AI/t5_os/bk_idk/tools/env_tools/beken_packager/cmake_Gen_image
-genfile
--injsonfile
-/home/huatuo/tmp/arduino_package/output/1.1.4/vendor-t5_for_open/platform/T5AI/t5_os/bk_idk/tools/env_tools/beken_packager/config.json
--infile
-/home/huatuo/tmp/arduino_package/output/1.1.4/vendor-t5_for_open/platform/T5AI/t5_os/bk_idk/components/bk_libs/bk7258/bootloader/normal_bootloader/bootloader.bin
--outfile
-/home/huatuo/tmp/arduino_package/output/1.1.4/vendor-t5_for_open/platform/T5AI/t5_os/build/bk7258/bootloader.bin
--genjson
-/home/huatuo/tmp/arduino_package/output/1.1.4/vendor-t5_for_open/platform/T5AI/t5_os/bk_idk/tools/env_tools/beken_packager/partition_bootloader.json
-    '''
     tool_gen_image, _ = _get_packager_tools(assets_root)
     config_file = os.path.join(
         root, "t5_os", "bk_idk", "tools", "env_tools",
